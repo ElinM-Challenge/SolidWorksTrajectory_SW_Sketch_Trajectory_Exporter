@@ -276,7 +276,7 @@ def collect_segments(
         _check_cancel(cancel)
         if bool(safe_member(segment, "ConstructionGeometry", default=False)):
             warnings.append(f"ignored construction geometry segment {index}")
-            _emit(progress, "collect", index + 1, total, 25.0 + 15.0 * (index + 1) / max(total, 1), f"跳过构造几何段 {index + 1}/{total}")
+            _emit(progress, "collect", index + 1, total, 15.0 + 20.0 * (index + 1) / max(total, 1), f"跳过构造几何段 {index + 1}/{total}")
             continue
         start_point = safe_member(segment, "GetStartPoint2")
         end_point = safe_member(segment, "GetEndPoint2")
@@ -305,7 +305,7 @@ def collect_segments(
                 circle_params=circle_params,
             )
         )
-        _emit(progress, "collect", index + 1, total, 25.0 + 15.0 * (index + 1) / max(total, 1), f"读取草图几何段 {index + 1}/{total}")
+        _emit(progress, "collect", index + 1, total, 15.0 + 20.0 * (index + 1) / max(total, 1), f"读取草图几何段 {index + 1}/{total}")
     return records
 
 
@@ -501,7 +501,7 @@ def build_path(
                 continue
             points.append(point)
             segment_ids.append(record.index)
-        _emit(progress, "sample", index + 1, total, 50.0 + 25.0 * (index + 1) / max(total, 1), f"生成轨迹 {index + 1}/{total}")
+        _emit(progress, "sample", index + 1, total, 40.0 + 35.0 * (index + 1) / max(total, 1), f"生成轨迹 {index + 1}/{total}")
     return deduplicate_join(points), segment_ids
 
 
@@ -546,7 +546,7 @@ def write_csv(
                 ]
             )
             if point_id == total - 1 or point_id % update_step == 0:
-                _emit(progress, "write_csv", point_id + 1, total, 82.0 + 13.0 * (point_id + 1) / max(total, 1), f"写入 CSV {point_id + 1}/{total}")
+                _emit(progress, "write_csv", point_id + 1, total, 80.0 + 18.0 * (point_id + 1) / max(total, 1), f"写入 CSV {point_id + 1}/{total}")
     return cumulative
 
 
@@ -564,7 +564,7 @@ def export_model(
     if not config.overwrite and (config.output_csv.exists() or config.metadata_path.exists()):
         raise FileExistsError("输出文件已存在，且当前未允许覆盖")
 
-    _emit(progress, "discover", 0, 1, 15.0, "正在读取当前模型和草图")
+    _emit(progress, "discover", 0, 1, 5.0, "正在读取当前模型和草图")
     sketches = find_sketch_features(model)
     if not sketches:
         raise RuntimeError("当前零件没有可用草图")
@@ -574,7 +574,7 @@ def export_model(
         "discover",
         1,
         1,
-        25.0,
+        15.0,
         f"已选择草图: {selected['name']}",
         {"sketches": [{k: item[k] for k in ("name", "is_3d", "segment_count")} for item in sketches]},
     )
@@ -592,7 +592,7 @@ def export_model(
     records = collect_segments(sketch, transform, warnings, progress, cancel)
     ordered, closed, component_count = order_segments(records, warnings)
     _check_cancel(cancel)
-    _emit(progress, "order", 1, 1, 50.0, f"已完成轨迹排序，共 {len(ordered)} 段")
+    _emit(progress, "order", 1, 1, 40.0, f"已完成轨迹排序，共 {len(ordered)} 段")
     points_m, segment_ids = build_path(
         ordered,
         transform,
@@ -612,7 +612,7 @@ def export_model(
         config.surface_offset_mm,
         warnings,
     )
-    _emit(progress, "offset", 1, 1, 82.0, "已应用表面偏置")
+    _emit(progress, "offset", 1, 1, 80.0, "已应用表面偏置")
 
     base_metadata = {
         "model_title": model_title,

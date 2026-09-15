@@ -106,6 +106,8 @@ class CoreSmokeTest(unittest.TestCase):
             self.assertAlmostEqual(result.trajectory_length_mm, 2.0)
             self.assertEqual(events[-1].percent, 100.0)
             self.assertEqual(events[-1].stage, "complete")
+            progress_values = [event.percent for event in events if event.percent is not None]
+            self.assertEqual(progress_values, sorted(progress_values))
 
 
 if __name__ == "__main__":

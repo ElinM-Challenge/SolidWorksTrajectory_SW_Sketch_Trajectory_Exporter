@@ -10,7 +10,8 @@
 - `events.py`：进度事件、结果和取消令牌。
 - `solidworks_adapter.py`：SolidWorks 会话访问接口。
 - `worker.py`：独立进程中的检查和导出任务。
-- `gui.py`：PySide6 图形界面。
+- `gui_fluent_workspace.py`：Fluent 风格图形界面。
+- `gui.py`：兼容用的旧版 PySide6 图形界面。
 - `vendor/`：SolidWorks COM 连接及环境预检辅助代码。
 - `tests/`：不依赖真实 SolidWorks 会话的核心测试。
 
